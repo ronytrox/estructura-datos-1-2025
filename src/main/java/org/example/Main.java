@@ -5,8 +5,22 @@ import java.util.Scanner;
 public class Main {
 
     private static Scanner sc = new Scanner(System.in);
+    // Lista enlazada de cursos
+    // Lista enlazada de estudiantes
+    // Lista enlazada de profesores
+
+    // ArrayList de estudiantes
+    // ArrayList de profesores
+
+    // Cola de cajas
+
+    // Árbol binario de estudiantes
+    // Árbol binario de profesores
+
+
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+
+        MostrarMenu();
     }
 
     private static void MostrarMenu() {
@@ -53,7 +67,7 @@ public class Main {
                     // El estudiante se agrega a la lista enlazada de estudiantes - Ronald
                     //Crear estudiante con id, nombre y demás atributos de estudiantes. (1%)
 
-                    // El estudiante se agrega a un arrayList en order alfabético por nombre o Id - Daniel Marin
+                    // El estudiante se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
 
                     // El estudiante se agrega a un árbol binario ordenado por cédula - Sebastíán
                     break;
@@ -66,7 +80,7 @@ public class Main {
 
                     // El profesor se agrega a la lista enlazada de profesores - Ronald
 
-                    // El profesor se agrega a un arrayList en order alfabético por nombre o Id - Daniel Marin
+                    // El profesor se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
 
                     // El profesor se agrega a un árbol binario ordenado por cédula - Sebastíán
 
@@ -85,20 +99,20 @@ public class Main {
 
                     break;
                 case "6":
-                    // Buscar estudiante por ID en la lista enlazada - Daniel Campos
+                    // Buscar estudiante por ID en la lista enlazada - Daniel Marín
                     // Buscar estudiante por ID e imprimir su información o indicar si no existe. (2%)
 
                     break;
 
                 case "7":
-                    // Buscar estudiante por nombre en la lista enlazada - Daniel Campos
+                    // Buscar estudiante por nombre en la lista enlazada - Daniel Marín
                     // Buscar estudiante por nombre e imprimir su información o indicar si no existe. (2%)
                     // Utilizar recursión para imprimir los cursos del estudiante
 
                     break;
 
                 case "8":
-                    // Buscar profesor por nombre en la lista enlazada y cursos asignados - Daniel Campos
+                    // Buscar profesor por nombre en la lista enlazada y cursos asignados - Daniel Marín
                     // Buscar profesor por nombre e imprimir su información y cursos asignados para el cuatrimestre. (2%)
                     // Utilizar recursión para imprimir los cursos del profesor
 
@@ -131,12 +145,12 @@ public class Main {
                     }
                     break;
                 case "10":
-                    // Buscar estudiantes en el arraylist ordenado con búsqueda binaria - Daniel Marin
+                    // Buscar estudiantes en el arraylist ordenado con búsqueda binaria - Daniel Campos
                     // Por ID o nombre (con lo que se haya ordenado)
 
                     break;
                 case "11":
-                    // Buscar profesores en el arraylist ordenado con búsqueda binaria - Daniel Marin
+                    // Buscar profesores en el arraylist ordenado con búsqueda binaria - Daniel Campos
                     // Por ID o nombre (con lo que se haya ordenado)
 
                     break;
