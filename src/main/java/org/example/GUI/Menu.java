@@ -28,8 +28,8 @@ public class Menu {
             print("2. Registrar estudiante");
             print("3. Registrar profesor");
 
-            print("\n4. Asignar curso a estudiante");
-            print("5. Asignar curso a profesor");
+            print("\n4. Matricular estudiante");
+            print("5. Asignar un curso a un profesor");
 
             print("\n6. Buscar estudiante por ID en lista enlazada");
             print("7. Buscar estudiante por nombre en lista enlazada");
@@ -62,11 +62,11 @@ public class Menu {
                     String emailStudent = read("Email: ");
                     String phoneStudent = read("Teléfono: ");
                     String addressStudent = read("Dirección: ");
-                    String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyy): ");
+                    String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
                     createStudent(idStudent,nameStudent,firstLastNameStudent,secondLastNameStudent,emailStudent,phoneStudent,addressStudent,birthdateStudent);
                     break;
                 case "3":
-                    print("Por favor digite la información del docente:");
+                    print("Por favor digite la información del profesor:");
                     String idTeacher = read("Ingrese la cédula: ");
                     String nameTeacher = read("Ingrese el nombre: ");
                     String firstLastNameTeacher = read("Primer apellido: ");
@@ -74,7 +74,7 @@ public class Menu {
                     String emailTeacher = read("Email: ");
                     String phoneTeacher = read("Teléfono: ");
                     String addressTeacher = read("Dirección: ");
-                    String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyy): ");
+                    String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
                     createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,secondLastNameTeacher,emailTeacher,phoneTeacher,addressTeacher,birthdateTeacher);
                     break;
                 case "4":
@@ -190,6 +190,7 @@ public class Menu {
         } else {
           course.setTeacher(teacher);
           teacher.addCourse(course);
+          print("Profesor " + teacher.getName() + " agregado correctamente al curso de " + course.getDescription());
         }
     }
 

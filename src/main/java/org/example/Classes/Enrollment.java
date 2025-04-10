@@ -20,6 +20,6 @@ public class Enrollment {
     public String printInfo() {
         return "Estudiante: " + student.getName() + " " + student.getFirstLastName() +
                 " | Curso: " + course.getDescription() +
-                " | Fecha: " + enrollmentDate;
+                " | Fecha de matrícula: " + enrollmentDate;
     }
 }
