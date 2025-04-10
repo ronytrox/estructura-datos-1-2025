@@ -58,24 +58,16 @@ public class Menu {
                     String idStudent = read("Ingrese la cédula: ");
                     String nameStudent = read("Ingrese el nombre: ");
                     String firstLastNameStudent = read("Primer apellido: ");
-                    String secondLastNameStudent = read("Segundo apellido: ");
-                    String emailStudent = read("Email: ");
-                    String phoneStudent = read("Teléfono: ");
-                    String addressStudent = read("Dirección: ");
                     String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-                    createStudent(idStudent,nameStudent,firstLastNameStudent,secondLastNameStudent,emailStudent,phoneStudent,addressStudent,birthdateStudent);
+                    createStudent(idStudent,nameStudent,firstLastNameStudent,birthdateStudent);
                     break;
                 case "3":
                     print("Por favor digite la información del profesor:");
                     String idTeacher = read("Ingrese la cédula: ");
                     String nameTeacher = read("Ingrese el nombre: ");
                     String firstLastNameTeacher = read("Primer apellido: ");
-                    String secondLastNameTeacher = read("Segundo apellido: ");
-                    String emailTeacher = read("Email: ");
-                    String phoneTeacher = read("Teléfono: ");
-                    String addressTeacher = read("Dirección: ");
                     String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-                    createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,secondLastNameTeacher,emailTeacher,phoneTeacher,addressTeacher,birthdateTeacher);
+                    createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,birthdateTeacher);
                     break;
                 case "4":
                     // Asignar curso a estudiante
@@ -148,18 +140,16 @@ public class Menu {
 
     }
 
-    private void createStudent(String id, String name, String firstLastName, String secondLastName,
-                               String email, String phone, String address, String birthdate) {
+    private void createStudent(String id, String name, String firstLastName, String birthdate) {
 
-        Student student = new Student(id, name, firstLastName, secondLastName, email, phone, address, birthdate);
+        Student student = new Student(id, name, firstLastName,birthdate);
         studentList.addStudent(student);
         print("Estudiante creado con ID: " + student.getId());
     }
 
-    private void createTeacher(String id, String name, String firstLastName, String secondLastName,
-                               String email, String phone, String address, String birthdate) {
+    private void createTeacher(String id, String name, String firstLastName,String birthdate) {
 
-        Teacher teacher = new Teacher(id, name, firstLastName, secondLastName, email, phone, address, birthdate);
+        Teacher teacher = new Teacher(id, name, firstLastName,birthdate);
         teacherList.addTeacher(teacher);
         print("Profesor creado con ID: " + teacher.getId());
     }
