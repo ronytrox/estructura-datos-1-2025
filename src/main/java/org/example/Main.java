@@ -1,6 +1,7 @@
 package org.example;
-
+import org.example.GUI.Menu;
 import java.util.Scanner;
+
 
 public class Main {
 
@@ -19,8 +20,12 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-        MostrarMenu();
+        Menu menu = new Menu();
+        try {
+            menu.showMenu();
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error: " + e.getMessage());
+        }
     }
 
     private static void MostrarMenu() {
