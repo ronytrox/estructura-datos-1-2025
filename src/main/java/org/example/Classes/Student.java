@@ -8,4 +8,9 @@ public class Student extends Person {
 
     }
 
+    @Override
+    public void printInfo() {
+        super.printInfo();
+    }
+
 }

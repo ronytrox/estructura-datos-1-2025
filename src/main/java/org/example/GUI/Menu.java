@@ -9,6 +9,10 @@ import org.example.LinkedLists.StudentList;
 import org.example.LinkedLists.TeacherList;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 
 
 public class Menu {
@@ -102,12 +106,14 @@ public class Menu {
                     // Buscar estudiante por nombre en la lista enlazada - Daniel Marín
                     // Buscar estudiante por nombre e imprimir su información o indicar si no existe. (2%)
                     // Utilizar recursión para imprimir los cursos del estudiante
+                    searchStudentByNameLinkedList();
 
                     break;
                 case "8":
                     // Buscar profesor por nombre en la lista enlazada y cursos asignados - Daniel Marín
                     // Buscar profesor por nombre e imprimir su información y cursos asignados para el cuatrimestre. (2%)
                     // Utilizar recursión para imprimir los cursos del profesor
+                    searchTeacherByNameLinkedList();
 
                     break;
                 case "9":
@@ -160,31 +166,52 @@ public class Menu {
                     break;
             }
 
+            promptForEnterKey();
+
         }
     }
 
     private void registerCourse() throws IOException {
-        String groupNumber = read("Número de grupo: ");
         String description = read("Descripción del curso: ");
+        String groupNumber = read("Número de grupo: ");
         print(createCourse(groupNumber, description));
     }
 
     private void registerStudent() throws IOException {
         print("Por favor digite la información del estudiante:");
         String idStudent = read("Ingrese la cédula: ");
+
+        // Validación
+        Student student = studentList.findById(idStudent);
+        if(student != null) {
+            print("Un estudiante con esta cédula ya existe en el registro");
+            student.printInfo();
+            return;
+        }
+
         String nameStudent = read("Ingrese el nombre: ");
         String firstLastNameStudent = read("Primer apellido: ");
-        String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-        createStudent(idStudent,nameStudent,firstLastNameStudent,birthdateStudent);
+        String birthdateStudent = requestBirtdate();
+
+        createStudentInArrayList(idStudent,nameStudent,firstLastNameStudent,birthdateStudent);
     }
 
     private void registerTeacher() throws IOException {
         print("Por favor digite la información del profesor:");
         String idTeacher = read("Ingrese la cédula: ");
+
+        //Validación
+        Teacher teacher = teacherList.findById(idTeacher);
+        if(teacher != null) {
+            print("Un profesor con esta cédula ya existe en el registro");
+            teacher.printInfo();
+            return;
+        }
+
         String nameTeacher = read("Ingrese el nombre: ");
         String firstLastNameTeacher = read("Primer apellido: ");
         String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-        createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,birthdateTeacher);
+        createTeacherInArrayList(idTeacher,nameTeacher,firstLastNameTeacher,birthdateTeacher);
     }
 
     private String createCourse(String groupNumber, String description) {
@@ -195,14 +222,14 @@ public class Menu {
 
     }
 
-    private void createStudent(String id, String name, String firstLastName, String birthdate) {
+    private void createStudentInArrayList(String id, String name, String firstLastName, String birthdate) {
 
         Student student = new Student(id, name, firstLastName,birthdate);
         studentList.addStudent(student);
         print("Estudiante creado con ID: " + student.getId());
     }
 
-    private void createTeacher(String id, String name, String firstLastName,String birthdate) {
+    private void createTeacherInArrayList(String id, String name, String firstLastName, String birthdate) {
 
         Teacher teacher = new Teacher(id, name, firstLastName,birthdate);
         teacherList.addTeacher(teacher);
@@ -211,44 +238,36 @@ public class Menu {
 
     private void assignStudentToCourse() throws IOException{
 
-        String studentId = read("Digite la cédula del estudiante: ");
-        String courseNumber = read("Digite el número de curso: ");
-        Student student = studentList.findById(studentId);
-        Course course = courseList.findByGroupNumber(courseNumber);
-
-        if (student == null) {
-            print("El estudiante no fue encontrado.");
-        } else if (course == null) {
-            print("El curso no fue encontrado.");
-        } else {
-            print(enrollmentList.enroll(student, course));
+        Student student = getStudentForAssignemnt();
+        if(student == null) {
+            return;
         }
+
+        Course course = getCourseForAssignment();
+        if(course == null) {
+            return;
+        }
+
+        print(enrollmentList.enroll(student, course));
+
     }
 
     private void assignTeacherToCourse() throws IOException {
 
-        String teacherId = read("Digite la cédula del profesor: ");
-        String courseNumber = read("Digite el número de curso: ");
-        Teacher teacher = teacherList.findById(teacherId);
-        Course course = courseList.findByGroupNumber(courseNumber);
-
-        if (teacher == null) {
-            print("El profesor no fue encontrado.");
-        } else if (course == null) {
-            print("El curso no fue encontrado.");
-        } else {
-          course.setTeacher(teacher);
-          teacher.addCourse(course);
-          print("Profesor " + teacher.getName() + " agregado correctamente al curso de " + course.getDescription());
+        Teacher teacher = getTeacherForAssignemnt();
+        if(teacher == null){
+            return;
         }
-    }
 
-    private void showCourses() {
-        if (courseList.isEmpty()) {
-            print("No hay cursos registrados.");
-        } else {
-            print(courseList.printAll());
+        Course course = getCourseForAssignment();
+        if(course == null) {
+            return;
         }
+
+        course.setTeacher(teacher);
+        teacher.addCourse(course);
+        print("Profesor " + teacher.getName() + " agregado correctamente al curso de " + course.getDescription());
+
     }
 
     private void searchStudentByIdLinkedList() throws IOException {
@@ -258,20 +277,116 @@ public class Menu {
             print("El estudiante no fue encontrado.");
         }
         else{
-            print("Estudiante encontrado:");
             student.printInfo();
         }
+    }
+
+    private void searchStudentByNameLinkedList() throws IOException{
+        String studentName = read("Digite el nombre del estudiante: ");
+        ArrayList<Student> students = studentList.findByName(studentName);
+        if(students.isEmpty()){
+            print("No se encontró ningún estudiante el nombre proporcionado.");
+        }
+        else{
+            print("Estudiantes encontrados: \n");
+            for (Student student : students) {
+                student.printInfo();
+                enrollmentList.printEnrollmentsByStudent(student.getId());
+            }
+        }
+    }
+
+    private void searchTeacherByNameLinkedList() throws IOException{
+        String teacherName = read("Digite el nombre del profesor: ");
+        ArrayList<Teacher> teachers = teacherList.findByName(teacherName);
+        if(teachers.isEmpty()){
+            print("No se encontró ningún profesor el nombre proporcionado.");
+        }
+        else{
+            print("Profesores encontrados: \n");
+            for (Teacher teacher : teachers) {
+                teacher.printInfo();
+            }
+        }
+    }
+
+    private Course getCourseForAssignment() throws IOException {
+        String courseId = read("Digite el id del grupo o digite \"0\" para imprimir una lista de cursos y grupos: ");
+        if(courseId.equals("0")){
+            courseList.printAllSummarized();
+            courseId = read("Digite el id del grupo: ");
+        }
+
+        Course course = courseList.findById(courseId);
+        if (course == null) {
+            print("El curso no fue encontrado.");
+            return null;
+        }
+
+        return course;
+    }
+    
+    private Student getStudentForAssignemnt() throws IOException{
+        String studentId = read("Digite la cédula del estudiante o digite \"0\" para imprimir una lista de estudiantes: ");
+        if(studentId.equals("0")){
+            studentList.printAllSummarized();
+            studentId = read("Digite la cédula del estudiante: ");
+        }
+        Student student = studentList.findById(studentId);
+        if (student == null) {
+            print("No se encontró ningún estudiante con la cédula proporcionada.");
+            return null;
+        }
+
+        return student;
+    }
+
+    private Teacher getTeacherForAssignemnt() throws IOException{
+        String teacherId = read("Digite la cédula del profesor o digite \"0\" para imprimir una lista de profesores: ");
+        if(teacherId.equals("0")){
+            teacherList.printAllSummarized();
+            teacherId = read("Digite la cédula del profesor: ");
+        }
+        Teacher teacher = teacherList.findById(teacherId);
+
+        if (teacher == null) {
+            print("No se encontró ningún profesor con la cédula proporcionada.");
+            return null;
+        }
+
+        return teacher;
     }
 
     // Misc
     public static String read(String s) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         print(s);
-        return reader.readLine();
+        return reader.readLine().trim();
     }
 
     public static void print(Object s) {
         System.out.println(s);
+    }
+
+    public void promptForEnterKey() throws IOException {
+        print("Presione \"ENTER\" para continuar...");
+        int read = System.in.read(new byte[2]);
+    }
+
+    private String requestBirtdate() throws IOException {
+        String birthdate = null;
+        boolean validDate = false;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        while(!validDate) {
+            try {
+                birthdate = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
+                LocalDate.parse(birthdate, formatter);
+                validDate = true;
+            }catch(DateTimeParseException e) {
+                print("Fecha ingresada con formato incorrecto. Intente de nuevo.");
+            }
+        }
+        return birthdate;
     }
 
 }

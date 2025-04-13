@@ -5,6 +5,8 @@ import org.example.Classes.Enrollment;
 import org.example.Classes.Student;
 import org.example.LinkedLists.Nodes.EnrollmentNode;
 
+import java.util.ArrayList;
+
 public class EnrollmentList {
     private EnrollmentNode head;
     int size = 0;
@@ -44,18 +46,28 @@ public class EnrollmentList {
     }
 
     // Buscar matrículas por estudiante
-    public String printEnrollmentsByStudent(String studentId) {
+    public void printEnrollmentsByStudent(String studentId) {
         EnrollmentNode current = head;
-        StringBuilder sb = new StringBuilder();
-        boolean found = false;
+        ArrayList<Course> courses = new ArrayList<>();
         while (current != null) {
             if (current.getEnrollment().getStudent().getId().equals(studentId)) {
-                sb.append(current.getEnrollment().printInfo()).append("\n");
-                found = true;
+                courses.add(current.getEnrollment().getCourse());
             }
             current = current.getNext();
         }
-        return found ? sb.toString().trim() : "El estudiante no tiene matrículas registradas.";
+        if(courses.isEmpty()) {
+            System.out.printf ("║ %-42s ║%n", "Sin cursos asignados");
+        }
+        else{
+            System.out.printf ("║ %-42s ║%n", "Cursos matriculados: ");
+            for(Course course : courses) {
+                String courseId = "Curso " + course.getId();
+                String courseDescription = course.getDescription() + " - Grp. " + course.getGroupNumber();
+                System.out.printf ("║ %-10s: %-30s ║%n", courseId, courseDescription);
+            }
+        }
+        System.out.println("╚════════════════════════════════════════════╝");
+
     }
 
     // Buscar matrículas por curso
