@@ -60,10 +60,11 @@ abstract class Person {
     public void setAge(int age) {
         this.age = age;
     }
-
+    
     public void printInfo() {
+        String personType = this instanceof Teacher ? "profesor" : this instanceof Student? "estudiante" : "persona";
         System.out.println("╔════════════════════════════════════════════╗");
-        System.out.printf ("║ %-42s ║%n", "Información de la Persona");
+        System.out.printf ("║ %-42s ║%n", "Información de " + personType);
         System.out.println("╠════════════════════════════════════════════╣");
         System.out.printf ("║ %-20s: %-17s ║%n", "ID", id);
         System.out.printf ("║ %-20s: %-17s ║%n", "Nombre completo", getFullName());

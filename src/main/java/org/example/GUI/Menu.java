@@ -13,10 +13,22 @@ import java.io.*;
 
 public class Menu {
 
+    // Lista enlazada de estudiantes
     private final StudentList studentList = new StudentList();
+    // Lista enlazada de profesores
     private final TeacherList teacherList = new TeacherList();
+    // Lista enlazada de cursos
     private final CourseList courseList = new CourseList();
     private final EnrollmentList enrollmentList = new EnrollmentList();
+
+    // ArrayList de estudiantes
+    // ArrayList de profesores
+
+
+    // Cola de cajas
+
+    // Árbol binario de estudiantes
+    // Árbol binario de profesores
 
     public void showMenu() throws IOException {
 
@@ -49,46 +61,54 @@ public class Menu {
             switch (option) {
                 case "1":
                     // Registrar curso en lista enlazada de cursos - Ronald
-                    String groupNumber = read("Número de grupo: ");
-                    String description = read("Descripción del curso: ");
-                    print(createCourse(groupNumber, description));
+                    //Crear cursos con id, número de grupo y una descripción del curso. (1%)
+                    registerCourse();
+
+
                     break;
                 case "2":
-                    print("Por favor digite la información del estudiante:");
-                    String idStudent = read("Ingrese la cédula: ");
-                    String nameStudent = read("Ingrese el nombre: ");
-                    String firstLastNameStudent = read("Primer apellido: ");
-                    String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-                    createStudent(idStudent,nameStudent,firstLastNameStudent,birthdateStudent);
+                    // El estudiante se agrega a la lista enlazada de estudiantes - Ronald
+                    //Crear estudiante con id, nombre y demás atributos de estudiantes. (1%)
+                    registerStudent();
+
+                    // El estudiante se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
+
+                    // El estudiante se agrega a un árbol binario ordenado por cédula - Sebastíán
+
                     break;
                 case "3":
-                    print("Por favor digite la información del profesor:");
-                    String idTeacher = read("Ingrese la cédula: ");
-                    String nameTeacher = read("Ingrese el nombre: ");
-                    String firstLastNameTeacher = read("Primer apellido: ");
-                    String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-                    createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,birthdateTeacher);
+                    // El profesor se agrega a la lista enlazada de profesores - Ronald
+                    registerTeacher();
+
+                    // El profesor se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
+
+                    // El profesor se agrega a un árbol binario ordenado por cédula - Sebastíán
                     break;
                 case "4":
-                    // Asignar curso a estudiante
-                    String studentId = read("Digite la cédula del estudiante: ");
-                    String courseNumberStudent = read("Digite el número de curso: ");
-                    assignStudentToCourse(studentId,courseNumberStudent);
+                    // Se asigna el curso al estudiante en la lista enlazada - Ronald
+                    assignStudentToCourse();
                     break;
                 case "5":
-                    // Asignar curso a profesor
-                    String teacherId = read("Digite la cédula del profesor: ");
-                    String courseNumberTeacher = read("Digite el número de curso: ");
-                    assignTeacherToCourse(teacherId,courseNumberTeacher);
+                    // Se asigna el curso al profesor en la lista enlazada - Ronald
+                    assignTeacherToCourse();
                     break;
                 case "6":
-                    // Buscar estudiante por ID
+                    // Buscar estudiante por cédula en la lista enlazada - Daniel Marín
+                    // Buscar estudiante por cédula e imprimir su información o indicar si no existe. (2%)
+                    searchStudentByIdLinkedList();
+
                     break;
                 case "7":
-                    // Buscar estudiante por nombre
+                    // Buscar estudiante por nombre en la lista enlazada - Daniel Marín
+                    // Buscar estudiante por nombre e imprimir su información o indicar si no existe. (2%)
+                    // Utilizar recursión para imprimir los cursos del estudiante
+
                     break;
                 case "8":
-                    // Buscar profesor por nombre
+                    // Buscar profesor por nombre en la lista enlazada y cursos asignados - Daniel Marín
+                    // Buscar profesor por nombre e imprimir su información y cursos asignados para el cuatrimestre. (2%)
+                    // Utilizar recursión para imprimir los cursos del profesor
+
                     break;
                 case "9":
                     while (!option.equals("0")) {
@@ -100,10 +120,16 @@ public class Menu {
                         option = read("");
                         switch (option) {
                             case "1":
-                                // Agregar persona a la cola
+                                // Agregar una persona a la cola de cajas - Sebastian
+                                // Opción para ingresar una persona a atender (con ID y nombre).
+                                // Utilizar una cola con listas enlazadas (LinkedList y Queue) vistas en clase
+                                // Manejar cuando llega un anciano (senior), este debe agregarse al principio de la fila.
+
                                 break;
                             case "2":
-                                // Atender persona
+                                // Atender a la siguiente persona, sacándola - Sebastián
+                                // Opción para atender a la siguiente persona, eliminándola de la cola.
+
                                 break;
                             case "0":
                                 print("Saliendo al menú principal");
@@ -112,16 +138,21 @@ public class Menu {
                     }
                     break;
                 case "10":
-                    // Búsqueda binaria estudiantes
+                    // Buscar estudiantes en el arraylist ordenado con búsqueda binaria - Daniel Campos
+                    // Por ID o nombre (con lo que se haya ordenado)
+
                     break;
                 case "11":
-                    // Búsqueda binaria profesores
+                    // Buscar profesores en el arraylist ordenado con búsqueda binaria - Daniel Campos
+                    // Por ID o nombre (con lo que se haya ordenado)
                     break;
                 case "12":
-                    // Buscar estudiante en árbol
+                    // Buscar estudiantes en el árbol binario por ID - Sebastian
+                    // Implementar un método de búsqueda eficiente en el BST.
                     break;
                 case "13":
-                    // Buscar profesor en árbol
+                    // Buscar profesores en el árbol binario por ID - Sebastian
+                    // Implementar un método de búsqueda eficiente en el BST.
                     break;
                 case "0":
                     print("Saliendo del sistema");
@@ -130,6 +161,30 @@ public class Menu {
             }
 
         }
+    }
+
+    private void registerCourse() throws IOException {
+        String groupNumber = read("Número de grupo: ");
+        String description = read("Descripción del curso: ");
+        print(createCourse(groupNumber, description));
+    }
+
+    private void registerStudent() throws IOException {
+        print("Por favor digite la información del estudiante:");
+        String idStudent = read("Ingrese la cédula: ");
+        String nameStudent = read("Ingrese el nombre: ");
+        String firstLastNameStudent = read("Primer apellido: ");
+        String birthdateStudent = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
+        createStudent(idStudent,nameStudent,firstLastNameStudent,birthdateStudent);
+    }
+
+    private void registerTeacher() throws IOException {
+        print("Por favor digite la información del profesor:");
+        String idTeacher = read("Ingrese la cédula: ");
+        String nameTeacher = read("Ingrese el nombre: ");
+        String firstLastNameTeacher = read("Primer apellido: ");
+        String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
+        createTeacher(idTeacher,nameTeacher,firstLastNameTeacher,birthdateTeacher);
     }
 
     private String createCourse(String groupNumber, String description) {
@@ -154,8 +209,10 @@ public class Menu {
         print("Profesor creado con ID: " + teacher.getId());
     }
 
-    private void assignStudentToCourse(String studentId, String courseNumber) {
+    private void assignStudentToCourse() throws IOException{
 
+        String studentId = read("Digite la cédula del estudiante: ");
+        String courseNumber = read("Digite el número de curso: ");
         Student student = studentList.findById(studentId);
         Course course = courseList.findByGroupNumber(courseNumber);
 
@@ -168,8 +225,10 @@ public class Menu {
         }
     }
 
-    private void assignTeacherToCourse(String teacherId, String courseNumber) {
+    private void assignTeacherToCourse() throws IOException {
 
+        String teacherId = read("Digite la cédula del profesor: ");
+        String courseNumber = read("Digite el número de curso: ");
         Teacher teacher = teacherList.findById(teacherId);
         Course course = courseList.findByGroupNumber(courseNumber);
 
@@ -192,6 +251,19 @@ public class Menu {
         }
     }
 
+    private void searchStudentByIdLinkedList() throws IOException {
+        String studentId = read("Digite la cédula del estudiante: ");
+        Student student = studentList.findById(studentId);
+        if(student == null) {
+            print("El estudiante no fue encontrado.");
+        }
+        else{
+            print("Estudiante encontrado:");
+            student.printInfo();
+        }
+    }
+
+    // Misc
     public static String read(String s) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         print(s);
