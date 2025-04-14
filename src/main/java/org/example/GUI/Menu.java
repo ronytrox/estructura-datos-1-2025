@@ -26,7 +26,9 @@ public class Menu {
     private final EnrollmentList enrollmentList = new EnrollmentList();
 
     // ArrayList de estudiantes
+    private final ArrayList<Student> studentsArrayList = new ArrayList<>();
     // ArrayList de profesores
+    private final ArrayList<Teacher> teachersArrayList = new ArrayList<>();
 
 
     // Cola de cajas
@@ -75,16 +77,12 @@ public class Menu {
                     //Crear estudiante con id, nombre y demás atributos de estudiantes. (1%)
                     registerStudent();
 
-                    // El estudiante se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
-
                     // El estudiante se agrega a un árbol binario ordenado por cédula - Sebastíán
 
                     break;
                 case "3":
                     // El profesor se agrega a la lista enlazada de profesores - Ronald
                     registerTeacher();
-
-                    // El profesor se agrega a un arrayList en order alfabético por nombre o Id - Daniel Campos
 
                     // El profesor se agrega a un árbol binario ordenado por cédula - Sebastíán
                     break;
@@ -145,12 +143,13 @@ public class Menu {
                     break;
                 case "10":
                     // Buscar estudiantes en el arraylist ordenado con búsqueda binaria - Daniel Campos
-                    // Por ID o nombre (con lo que se haya ordenado)
+                    studentsBinarySearch(studentsArrayList);
 
                     break;
                 case "11":
                     // Buscar profesores en el arraylist ordenado con búsqueda binaria - Daniel Campos
-                    // Por ID o nombre (con lo que se haya ordenado)
+                    teachersBinarySearch(teachersArrayList);
+
                     break;
                 case "12":
                     // Buscar estudiantes en el árbol binario por ID - Sebastian
@@ -226,13 +225,24 @@ public class Menu {
 
         Student student = new Student(id, name, firstLastName,birthdate);
         studentList.addStudent(student);
+
+        // Para busqueda binaria
+        studentsArrayList.add(student);
+        studentsBubbleSort(studentsArrayList);
+
         print("Estudiante creado con ID: " + student.getId());
+
     }
 
     private void createTeacherInArrayList(String id, String name, String firstLastName, String birthdate) {
 
         Teacher teacher = new Teacher(id, name, firstLastName,birthdate);
         teacherList.addTeacher(teacher);
+
+        // Para busqueda binaria
+        teachersArrayList.add(teacher);
+        teachersBubbleSort(teachersArrayList);
+
         print("Profesor creado con ID: " + teacher.getId());
     }
 
@@ -356,6 +366,101 @@ public class Menu {
 
         return teacher;
     }
+
+    public static void studentsBubbleSort(ArrayList<Student> array) {
+        int n = array.size();
+
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (Integer.parseInt(array.get(j).getId()) > Integer.parseInt(array.get(j + 1).getId())) {
+                    Student temp = array.get(j);
+                    array.set(j, array.get(j + 1));
+                    array.set(j + 1, temp);
+                }
+            }
+
+        }
+    }
+
+    public static void teachersBubbleSort(ArrayList<Teacher> array) {
+        int n = array.size();
+
+        for (int i = 0; i < n - 1; i++) {
+
+            for (int j = 0; j < n - 1 - i; j++) {
+                if (Integer.parseInt(array.get(j).getId()) > Integer.parseInt(array.get(j + 1).getId())) {
+                    Teacher temp = array.get(j);
+                    array.set(j, array.get(j + 1));
+                    array.set(j + 1, temp);
+                }
+            }
+
+        }
+    }
+
+    public static void studentsBinarySearch(ArrayList<Student> studentsArrayList) throws IOException {
+        int studentId = Integer.parseInt(read("Ingrese el ID del estudiante"));
+        print("Buscando estudiante con ID: " + studentId);
+        int studentIndex = studentsBinarySearchById(studentsArrayList, studentId);
+        if (studentIndex != -1) {
+            studentsArrayList.get(studentIndex).printInfo();
+        } else {
+            print("No existe el estudiante con ID: " + studentId);
+        }
+    }
+
+    public static int studentsBinarySearchById(ArrayList<Student> list, int id) {
+        int left = 0;
+        int right = list.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int midId = Integer.parseInt(list.get(mid).getId()) ;
+
+            if (midId == id) {
+                return mid; // encontrado
+            } else if (midId < id) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return -1; // no encontrado
+    }
+
+    public static void teachersBinarySearch(ArrayList<Teacher> teachersArrayList) throws IOException {
+        int teacherId = Integer.parseInt(read("Ingrese el ID del profesor"));
+        print("Buscando profesor con ID: " + teacherId);
+        int teacherIndex = teachersBinarySearchById(teachersArrayList, teacherId);
+        if (teacherIndex != -1) {
+            teachersArrayList.get(teacherIndex).printInfo();
+        } else {
+            print("No existe el profesor con ID: " + teacherId);
+        }
+    }
+
+    public static int teachersBinarySearchById(ArrayList<Teacher> list, int id) {
+        int left = 0;
+        int right = list.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int midId = Integer.parseInt(list.get(mid).getId()) ;
+
+            if (midId == id) {
+                return mid; // encontrado
+            } else if (midId < id) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return -1; // no encontrado
+    }
+
 
     // Misc
     public static String read(String s) throws IOException {
