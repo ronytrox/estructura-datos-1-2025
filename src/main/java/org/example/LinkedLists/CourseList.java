@@ -2,6 +2,7 @@ package org.example.LinkedLists;
 
 import org.example.Classes.Course;
 import org.example.LinkedLists.Nodes.CourseNode;
+import org.example.LinkedLists.Nodes.StudentNode;
 
 public class CourseList {
     private CourseNode head;
@@ -34,6 +35,18 @@ public class CourseList {
         return null;
     }
 
+    public Course findById(String id) {
+        CourseNode current = head;
+        while (current != null) {
+            String currentId = String.valueOf(current.getCourse().getId());
+            if (currentId.equals(id)) {
+                return current.getCourse();
+            }
+            current = current.getNext();
+        }
+        return null;
+    }
+
     public boolean isEmpty() {
         return head == null;
     }
@@ -51,6 +64,22 @@ public class CourseList {
         }
 
         return sb.toString().trim();
+    }
+
+    public CourseNode peek(){
+        return head;
+    }
+
+    public void printAllSummarized() {
+        if (head == null) {
+            System.out.println("No hay cursos registrados.");
+            return;
+        }
+        CourseNode current = head;
+        while (current != null) {
+            System.out.print(current.getCourse().getId() + " - Curso: " + current.getCourse().getDescription() + " - Grupo: " + current.getCourse().getGroupNumber() + "\n");
+            current = current.getNext();
+        }
     }
 
 
