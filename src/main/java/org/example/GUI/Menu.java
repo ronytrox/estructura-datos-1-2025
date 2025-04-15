@@ -174,6 +174,7 @@ public class Menu {
                     break;
                 case "12":
                     // Buscar estudiantes en el árbol binario por ID - Sebastian
+                    registerStudent();
                     print("Ingrese el ID del estudiante que desea buscar: ");
                     String studentId = read(""); // Leer el ID del estudiante
                     Object student = bst.searchById(studentId); // Usar el método searchById para buscar al estudiante
@@ -202,36 +203,6 @@ public class Menu {
                     } else {
                         // Si no se encuentra el profesor
                         System.out.println("Profesor con ID " + teacherId + " no encontrado.");
-                    }
-                    break;
-                case "14":
-                    print("¿Qué tipo de persona desea añadir? (1) Estudiante, (2) Profesor: ");
-                    String type = read(""); // Leer el tipo de persona (1 o 2)
-
-                    print("Ingrese el ID: ");
-                    String id = read(""); // Leer el ID de la persona
-
-                    print("Ingrese el nombre: ");
-                    String name = read(""); // Leer el nombre de la persona
-
-                    print("Ingrese el apellido de la persona: ");
-                    String lastName = read(""); // Leer el apellido de la persona
-
-                    print("Ingrese la fecha de nacimiento de la persona (formato: dd-MM-yyyy): ");
-                    String birthdate = read(""); // Leer la fecha de nacimiento
-
-                    if (type.equals("1")) {
-                        // Crear un estudiante
-                        Student newStudent = new Student(id, name, lastName, birthdate);
-                        bst.insert(newStudent); // Insertar el estudiante en el árbol
-                        System.out.println("Estudiante agregado: " + newStudent.getName());
-                    } else if (type.equals("2")) {
-                        // Crear un profesor
-                        Teacher newTeacher = new Teacher(id, name, lastName, birthdate);
-                        bst.insert(newTeacher); // Insertar el profesor en el árbol
-                        System.out.println("Profesor agregado: " + newTeacher.getName());
-                    } else {
-                        System.out.println("Opción inválida. Debe elegir 1 para Estudiante o 2 para Profesor.");
                     }
                     break;
                 case "0":
@@ -267,6 +238,8 @@ public class Menu {
         String firstLastNameStudent = read("Primer apellido: ");
         String birthdateStudent = requestBirtdate();
 
+        Student newStudent = new Student(idStudent, nameStudent, firstLastNameStudent, birthdateStudent);
+        bst.insert(newStudent);
         createStudentInArrayList(idStudent, nameStudent, firstLastNameStudent, birthdateStudent);
     }
 
@@ -285,6 +258,8 @@ public class Menu {
         String nameTeacher = read("Ingrese el nombre: ");
         String firstLastNameTeacher = read("Primer apellido: ");
         String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
+        Teacher newTeacher = new Teacher(idTeacher, nameTeacher, firstLastNameTeacher, birthdateTeacher);
+        bst.insert(newTeacher);
         createTeacherInArrayList(idTeacher, nameTeacher, firstLastNameTeacher, birthdateTeacher);
     }
 
