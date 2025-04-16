@@ -60,7 +60,6 @@ public class Menu {
             print("11. Búsqueda binaria de profesores");
             print("12. Buscar estudiante en árbol binario");
             print("13. Buscar profesor en árbol binario");
-            print("14. Añadir persona en árbol binario");
 
             print("\n0.Salir");
 
@@ -129,26 +128,8 @@ public class Menu {
                         option = read("");
                         switch (option) {
                             case "1":
-                                // Solicitar datos para agregar persona
-                                print("¿Es estudiante? (true/false): ");
-                                boolean isStudent = Boolean.parseBoolean(read(""));
-
-                                print("Ingrese nombre de la persona: ");
-                                String name = read("");
-
-                                print("Ingrese ID de la persona: ");
-                                String id = read("");
-
-                                // Solicitar apellido
-                                print("Ingrese el apellido de la persona: ");
-                                String lastName = read("");
-
-                                // Solicitar fecha de nacimiento
-                                print("Ingrese la fecha de nacimiento de la persona (formato: dd-MM-yyyy): ");
-                                String birthdate = read("");
-
-                                // Agregar la persona
-                                attentionQueue.addPerson(name, id, isStudent, lastName, birthdate);
+                                // Solicitar datos y agregar persona
+                                addPersonToQueue();
                                 break;
                             case "2":
                                 // Atender a la siguiente persona
@@ -174,36 +155,13 @@ public class Menu {
                     break;
                 case "12":
                     // Buscar estudiantes en el árbol binario por ID - Sebastian
-                    registerStudent();
-                    print("Ingrese el ID del estudiante que desea buscar: ");
-                    String studentId = read(""); // Leer el ID del estudiante
-                    Object student = bst.searchById(studentId); // Usar el método searchById para buscar al estudiante
+                    searchStudentByIdBST();
 
-                    if (student != null && student instanceof Student) {
-                        // Si se encuentra un estudiante
-                        Student foundStudent = (Student) student;
-                        System.out.println(
-                                "Estudiante encontrado: " + foundStudent.getName() + " - " + foundStudent.getId());
-                    } else {
-                        // Si no se encuentra el estudiante
-                        System.out.println("Estudiante con ID " + studentId + " no encontrado.");
-                    }
                     break;
                 case "13":
                     // Buscar profesores en el árbol binario por ID - Sebastian
-                    print("Ingrese el ID del profesor que desea buscar: ");
-                    String teacherId = read(""); // Leer el ID del profesor
-                    Object teacher = bst.searchById(teacherId); // Usar el método searchById para buscar al profesor
+                    searchTeacherByIdBST();
 
-                    if (teacher != null && teacher instanceof Teacher) {
-                        // Si se encuentra un profesor
-                        Teacher foundTeacher = (Teacher) teacher;
-                        System.out.println(
-                                "Profesor encontrado: " + foundTeacher.getName() + " - " + foundTeacher.getId());
-                    } else {
-                        // Si no se encuentra el profesor
-                        System.out.println("Profesor con ID " + teacherId + " no encontrado.");
-                    }
                     break;
                 case "0":
                     print("Saliendo del sistema");
@@ -235,12 +193,10 @@ public class Menu {
         }
 
         String nameStudent = read("Ingrese el nombre: ");
-        String firstLastNameStudent = read("Primer apellido: ");
+        String firstLastNameStudent = read("Ingrese el primer apellido: ");
         String birthdateStudent = requestBirtdate();
 
-        Student newStudent = new Student(idStudent, nameStudent, firstLastNameStudent, birthdateStudent);
-        bst.insert(newStudent);
-        createStudentInArrayList(idStudent, nameStudent, firstLastNameStudent, birthdateStudent);
+        createStudent(idStudent, nameStudent, firstLastNameStudent, birthdateStudent);
     }
 
     private void registerTeacher() throws IOException {
@@ -256,11 +212,10 @@ public class Menu {
         }
 
         String nameTeacher = read("Ingrese el nombre: ");
-        String firstLastNameTeacher = read("Primer apellido: ");
-        String birthdateTeacher = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
-        Teacher newTeacher = new Teacher(idTeacher, nameTeacher, firstLastNameTeacher, birthdateTeacher);
-        bst.insert(newTeacher);
-        createTeacherInArrayList(idTeacher, nameTeacher, firstLastNameTeacher, birthdateTeacher);
+        String firstLastNameTeacher = read("Ingrese el primer apellido: ");
+        String birthdateTeacher = requestBirtdate();
+
+        createTeacher(idTeacher, nameTeacher, firstLastNameTeacher, birthdateTeacher);
     }
 
     private String createCourse(String groupNumber, String description) {
@@ -271,7 +226,7 @@ public class Menu {
 
     }
 
-    private void createStudentInArrayList(String id, String name, String firstLastName, String birthdate) {
+    private void createStudent(String id, String name, String firstLastName, String birthdate) {
 
         Student student = new Student(id, name, firstLastName, birthdate);
         studentList.addStudent(student);
@@ -280,11 +235,14 @@ public class Menu {
         studentsArrayList.add(student);
         studentsBubbleSort(studentsArrayList);
 
+        //Para árbol binario
+        bst.insert(student);
+
         print("Estudiante creado con ID: " + student.getId());
 
     }
 
-    private void createTeacherInArrayList(String id, String name, String firstLastName, String birthdate) {
+    private void createTeacher(String id, String name, String firstLastName, String birthdate) {
 
         Teacher teacher = new Teacher(id, name, firstLastName, birthdate);
         teacherList.addTeacher(teacher);
@@ -292,6 +250,9 @@ public class Menu {
         // Para busqueda binaria
         teachersArrayList.add(teacher);
         teachersBubbleSort(teachersArrayList);
+
+        // Para árbol binario
+        bst.insert(teacher);
 
         print("Profesor creado con ID: " + teacher.getId());
     }
@@ -337,6 +298,7 @@ public class Menu {
             print("El estudiante no fue encontrado.");
         } else {
             student.printInfo();
+            enrollmentList.printEnrollmentsByStudent(student.getId());
         }
     }
 
@@ -384,8 +346,7 @@ public class Menu {
     }
 
     private Student getStudentForAssignemnt() throws IOException {
-        String studentId = read(
-                "Digite la cédula del estudiante o digite \"0\" para imprimir una lista de estudiantes: ");
+        String studentId = read("Digite la cédula del estudiante o digite \"0\" para imprimir una lista de estudiantes: ");
         if (studentId.equals("0")) {
             studentList.printAllSummarized();
             studentId = read("Digite la cédula del estudiante: ");
@@ -447,12 +408,13 @@ public class Menu {
         }
     }
 
-    public static void studentsBinarySearch(ArrayList<Student> studentsArrayList) throws IOException {
+    public void studentsBinarySearch(ArrayList<Student> studentsArrayList) throws IOException {
         int studentId = Integer.parseInt(read("Ingrese el ID del estudiante"));
         print("Buscando estudiante con ID: " + studentId);
         int studentIndex = studentsBinarySearchById(studentsArrayList, studentId);
         if (studentIndex != -1) {
             studentsArrayList.get(studentIndex).printInfo();
+            enrollmentList.printEnrollmentsByStudent(studentsArrayList.get(studentIndex).getId());
         } else {
             print("No existe el estudiante con ID: " + studentId);
         }
@@ -509,6 +471,58 @@ public class Menu {
         return -1; // no encontrado
     }
 
+    private void addPersonToQueue() throws IOException{
+        String isStudentAnswer = read("¿Es estudiante? (Digite s/n): ").strip().toLowerCase();
+        boolean isStudent = isStudentAnswer.equals("s");
+
+        // Solicitar Id
+        String id = read("Ingrese el ID de la persona: ");
+
+        // Solicitar nombre
+        String name = read("Ingrese el nombre de la persona: ");
+
+        // Solicitar apellido
+        String lastName = read("Ingrese el apellido de la persona: ");
+
+        // Solicitar fecha de nacimiento
+        String birthdate = requestBirtdate();
+
+        // Agregar la persona
+        attentionQueue.addPerson(name, id, isStudent, lastName, birthdate);
+    }
+
+    private void searchStudentByIdBST() throws IOException {
+        String studentId = read("Ingrese el ID del estudiante que desea buscar: "); // Leer el ID del estudiante
+        Object student = bst.searchById(studentId); // Usar el método searchById para buscar al estudiante
+
+        if (student != null && student instanceof Student) {
+            // Si se encuentra un estudiante
+            Student foundStudent = (Student) student;
+            print("Estudiante encontrado: " + foundStudent.getName() + " - " + foundStudent.getId());
+            foundStudent.printInfo();
+            enrollmentList.printEnrollmentsByStudent(foundStudent.getId());
+
+        } else {
+            // Si no se encuentra el estudiante
+            print("Estudiante con ID " + studentId + " no encontrado.");
+        }
+    }
+
+    private void searchTeacherByIdBST() throws IOException{
+        String teacherId = read("Ingrese el ID del profesor que desea buscar: "); // Leer el ID del profesor
+        Object teacher = bst.searchById(teacherId); // Usar el método searchById para buscar al profesor
+
+        if (teacher != null && teacher instanceof Teacher) {
+            // Si se encuentra un profesor
+            Teacher foundTeacher = (Teacher) teacher;
+            print("Profesor encontrado: " + foundTeacher.getName() + " - " + foundTeacher.getId());
+            foundTeacher.printInfo();
+        } else {
+            // Si no se encuentra el profesor
+            print("Profesor con ID " + teacherId + " no encontrado.");
+        }
+    }
+
     // Misc
     public static String read(String s) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -531,7 +545,7 @@ public class Menu {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         while (!validDate) {
             try {
-                birthdate = read("Fecha de nacimiento (Formato dd-MM-yyyy): ");
+                birthdate = read("Ingrese la fecha de nacimiento (Formato dd-MM-yyyy): ");
                 LocalDate.parse(birthdate, formatter);
                 validDate = true;
             } catch (DateTimeParseException e) {
