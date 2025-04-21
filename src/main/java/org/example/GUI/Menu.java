@@ -532,7 +532,6 @@ public class Menu {
         return reader.readLine().trim();
     }
 
-
     public static void print(Object s) {
         System.out.println(s);
     }
