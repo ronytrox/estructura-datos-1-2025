@@ -472,7 +472,9 @@ public class Menu {
     }
 
     private void addPersonToQueue() throws IOException{
-        String isStudentAnswer = read("¿Es estudiante? (Digite s/n): ").strip().toLowerCase();
+        
+        String isStudentAnswer = read("¿Es estudiante? (Digite s/n): ").trim().toLowerCase();
+        
         boolean isStudent = isStudentAnswer.equals("s");
 
         // Solicitar Id
@@ -529,6 +531,7 @@ public class Menu {
         print(s);
         return reader.readLine().trim();
     }
+
 
     public static void print(Object s) {
         System.out.println(s);
